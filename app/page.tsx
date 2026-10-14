@@ -432,12 +432,17 @@ export default function Home() {
               Interested in working together, discussing an opportunity, or
               sharing an idea? I&apos;d be happy to connect.
             </p>
-            <a
-              href="mailto:your-email@example.com"
-              className="contact-reveal mt-8 inline-flex items-center gap-3 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-black transition hover:bg-violet-100"
-            >
-              Contact me ↗
-            </a>
+            
+
+<a
+  href="https://mail.google.com/mail/?view=cm&fs=1&to=selvarathinam825@gmail.com"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-purple-200"
+>
+  Contact me ↗
+</a>
+
           </div>
         </div>
       </section>
