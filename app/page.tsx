@@ -357,18 +357,50 @@ export default function Home() {
             <a
               key={project.slug}
               href={`/projects/${project.slug}`}
-              onMouseMove={(event) => {
-                const rect = event.currentTarget.getBoundingClientRect();
-                event.currentTarget.style.setProperty(
-                  "--spotlight-x",
-                  `${event.clientX - rect.left}px`
-                );
-                event.currentTarget.style.setProperty(
-                  "--spotlight-y",
-                  `${event.clientY - rect.top}px`
-                );
+              onPointerMove={(event) => {
+                // Pointer-driven effects are only enabled for a real mouse.
+                if (event.pointerType !== "mouse") return;
+
+                const card = event.currentTarget;
+
+                // Respect the operating system's reduced-motion preference.
+                if (
+                  window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                ) {
+                  return;
+                }
+
+                const rect = card.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+                const halfWidth = Math.max(rect.width / 2, 1);
+                const halfHeight = Math.max(rect.height / 2, 1);
+                const normalizedX = (x - halfWidth) / halfWidth;
+                const normalizedY = (y - halfHeight) / halfHeight;
+
+                // Spotlight coordinates.
+                card.style.setProperty("--spotlight-x", `${x}px`);
+                card.style.setProperty("--spotlight-y", `${y}px`);
+
+                // Gentle 3D tilt plus a subtle magnetic shift.
+                const rotateY = normalizedX * 5;
+                const rotateX = normalizedY * -5;
+                const translateX = normalizedX * 3;
+                const translateY = normalizedY * 3;
+
+                card.style.transform = `perspective(1100px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translate3d(${translateX}px, ${translateY}px, 0)`;
               }}
-              className="project-card project-card-premium group block overflow-hidden rounded-3xl border border-white/[0.09] bg-[#0d0d19] transition duration-500 hover:-translate-y-1 hover:border-violet-400/40"
+              onPointerLeave={(event) => {
+                event.currentTarget.style.transform =
+                  "perspective(1100px) rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0)";
+                event.currentTarget.style.setProperty("--spotlight-x", "50%");
+                event.currentTarget.style.setProperty("--spotlight-y", "50%");
+              }}
+              onBlur={(event) => {
+                event.currentTarget.style.transform =
+                  "perspective(1100px) rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0)";
+              }}
+              className="project-card project-card-premium group block overflow-hidden rounded-3xl border border-white/[0.09] bg-[#0d0d19] transition-[transform,box-shadow,border-color] duration-300 ease-out hover:border-violet-400/40"
             >
               <div
                 className={`relative flex h-56 items-center justify-center overflow-hidden bg-gradient-to-br ${project.color}`}
@@ -442,6 +474,35 @@ export default function Home() {
 >
   Contact me ↗
 </a>
+
+<div className="mt-6 flex flex-wrap gap-3">
+  <a
+    href="https://github.com/Selva3034"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="rounded-full border border-white/15 px-5 py-3 text-sm text-white transition hover:border-violet-400 hover:bg-violet-500/10"
+  >
+    GitHub ↗
+  </a>
+
+  <a
+    href="https://www.linkedin.com/in/selva3034/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="rounded-full border border-white/15 px-5 py-3 text-sm text-white transition hover:border-violet-400 hover:bg-violet-500/10"
+  >
+    LinkedIn ↗
+  </a>
+
+  <a
+    href="mailto:selvarathinam825@gmail.com"
+    className="rounded-full border border-white/15 px-5 py-3 text-sm text-white transition hover:border-violet-400 hover:bg-violet-500/10"
+  >
+    Email ↗
+  </a>
+  
+</div>
+
 
           </div>
         </div>

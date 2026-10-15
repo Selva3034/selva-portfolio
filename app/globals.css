@@ -1201,3 +1201,79 @@ body {
     min-height: 165px;
   }
 }
+
+
+
+/* =========================================================
+   INTERACTIVE PROJECT CARDS
+   React Bits-inspired: pointer spotlight, 3D tilt and magnetic hover
+   ========================================================= */
+
+.project-card-premium {
+  transform-style: preserve-3d;
+  transform-origin: center;
+  will-change: transform;
+  transition:
+    transform 260ms cubic-bezier(0.2, 0.75, 0.25, 1),
+    box-shadow 300ms ease,
+    border-color 300ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.project-card-premium::before {
+  border-radius: inherit;
+  background: radial-gradient(
+    340px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+    rgba(139, 92, 246, 0.20),
+    rgba(34, 211, 238, 0.07) 38%,
+    transparent 72%
+  );
+}
+
+.project-card-premium:hover {
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.28),
+    0 0 28px rgba(139, 92, 246, 0.10);
+}
+
+/* The preview lifts very slightly inside the card, not the whole layout. */
+.project-card-premium .pp-app {
+  transition:
+    transform 350ms ease,
+    border-color 350ms ease,
+    box-shadow 350ms ease;
+}
+
+.project-card-premium:focus-visible {
+  outline: 2px solid rgba(167, 139, 250, 0.9);
+  outline-offset: 4px;
+}
+
+/* No pointer-following movement on touchscreens. */
+@media (hover: none), (pointer: coarse) {
+  .project-card-premium {
+    transform: none !important;
+    will-change: auto;
+    transition:
+      box-shadow 250ms ease,
+      border-color 250ms ease;
+  }
+
+  .project-card-premium::before {
+    display: none;
+  }
+}
+
+/* Accessibility: keep motion minimal when requested by the user. */
+@media (prefers-reduced-motion: reduce) {
+  .project-card-premium,
+  .project-card-premium::before,
+  .project-card-premium .pp-app {
+    transition: none !important;
+  }
+
+  .project-card-premium {
+    transform: none !important;
+    will-change: auto;
+  }
+}
