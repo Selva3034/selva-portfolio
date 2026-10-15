@@ -71,6 +71,11 @@ const projects = {
 
 type ProjectSlug = keyof typeof projects;
 
+// Pre-render every project route at build time.
+export function generateStaticParams() {
+  return Object.keys(projects).map((slug) => ({ slug }));
+}
+
 export default async function ProjectPage({
   params,
 }: {
@@ -90,6 +95,7 @@ export default async function ProjectPage({
         <Link href="/" className="font-semibold tracking-wide">
           SELVA<span className="text-violet-400">.</span>
         </Link>
+
         <Link
           href="/#projects"
           className="text-sm text-zinc-400 hover:text-white"
@@ -115,7 +121,7 @@ export default async function ProjectPage({
         <a
           href={project.github}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className="mt-8 inline-flex rounded-full bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-violet-100"
         >
           View on GitHub ↗
