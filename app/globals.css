@@ -1202,78 +1202,215 @@ body {
   }
 }
 
-
-
 /* =========================================================
-   INTERACTIVE PROJECT CARDS
-   React Bits-inspired: pointer spotlight, 3D tilt and magnetic hover
+   SELVA PORTFOLIO — GLOBAL UI POLISH
+   CSS-only upgrade. Keeps existing components and class names.
    ========================================================= */
 
-.project-card-premium {
-  transform-style: preserve-3d;
-  transform-origin: center;
-  will-change: transform;
-  transition:
-    transform 260ms cubic-bezier(0.2, 0.75, 0.25, 1),
-    box-shadow 300ms ease,
-    border-color 300ms ease;
-  -webkit-tap-highlight-color: transparent;
+:root {
+  color-scheme: dark;
+  --portfolio-bg: #070711;
+  --portfolio-panel: rgba(16, 16, 31, 0.72);
+  --portfolio-border: rgba(255, 255, 255, 0.09);
+  --portfolio-border-hover: rgba(167, 139, 250, 0.42);
+  --portfolio-violet: #a78bfa;
+  --portfolio-cyan: #67e8f9;
+  --portfolio-muted: #a1a1aa;
+  --portfolio-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  scroll-behavior: smooth;
+  scroll-padding-top: 24px;
 }
 
-.project-card-premium::before {
-  border-radius: inherit;
-  background: radial-gradient(
-    340px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
-    rgba(139, 92, 246, 0.20),
-    rgba(34, 211, 238, 0.07) 38%,
-    transparent 72%
-  );
+html {
+  background: var(--portfolio-bg);
+  scrollbar-color: rgba(139, 92, 246, 0.65) #090914;
+  scrollbar-width: thin;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-.project-card-premium:hover {
-  box-shadow:
-    0 18px 50px rgba(0, 0, 0, 0.28),
-    0 0 28px rgba(139, 92, 246, 0.10);
+body {
+  min-height: 100vh;
+  background-color: var(--portfolio-bg);
+  background-image:
+    radial-gradient(ellipse at 50% -18%, rgba(109, 40, 217, 0.12), transparent 48%),
+    radial-gradient(ellipse at 100% 48%, rgba(8, 145, 178, 0.045), transparent 36%);
+  color: #f4f4f8;
+  font-family: var(--font-geist-sans), Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-feature-settings: "ss01" on, "cv11" on;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* The preview lifts very slightly inside the card, not the whole layout. */
-.project-card-premium .pp-app {
-  transition:
-    transform 350ms ease,
-    border-color 350ms ease,
-    box-shadow 350ms ease;
+::selection {
+  color: #fff;
+  background: rgba(124, 58, 237, 0.58);
 }
 
-.project-card-premium:focus-visible {
-  outline: 2px solid rgba(167, 139, 250, 0.9);
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090914;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid #090914;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #8b5cf6, #4f46e5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #a78bfa, #6366f1);
+}
+
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid rgba(167, 139, 250, 0.95);
   outline-offset: 4px;
 }
 
-/* No pointer-following movement on touchscreens. */
-@media (hover: none), (pointer: coarse) {
-  .project-card-premium {
-    transform: none !important;
-    will-change: auto;
-    transition:
-      box-shadow 250ms ease,
-      border-color 250ms ease;
+:where(button, a) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(img, video, canvas, svg) {
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+/* Keep interactive controls crisp and consistent. */
+:where(a, button) {
+  transition-timing-function: var(--portfolio-ease);
+}
+
+:where(button, [role="button"]) {
+  cursor: pointer;
+}
+
+/* The hero and section content remain controlled by the existing JSX. */
+.reveal,
+.contact-reveal {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Project cards: layered glass, refined border and smooth lift. */
+.project-card-premium {
+  isolation: isolate;
+  border-color: var(--portfolio-border);
+  background-image: linear-gradient(145deg, rgba(255, 255, 255, 0.025), transparent 42%);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 420ms var(--portfolio-ease),
+    border-color 320ms ease,
+    box-shadow 420ms var(--portfolio-ease),
+    background-color 320ms ease;
+}
+
+.project-card-premium::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.28), transparent 32%, transparent 68%, rgba(103, 232, 249, 0.13));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 350ms ease;
+}
+
+.project-card-premium:hover,
+.project-card-premium:focus-visible {
+  border-color: var(--portfolio-border-hover);
+  box-shadow:
+    0 24px 65px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(139, 92, 246, 0.07),
+    0 0 38px rgba(124, 58, 237, 0.09);
+}
+
+.project-card-premium:hover::after,
+.project-card-premium:focus-visible::after {
+  opacity: 1;
+}
+
+.project-card-premium > * {
+  backface-visibility: hidden;
+}
+
+/* Showcase layout refinement. */
+.showcase-section {
+  isolation: isolate;
+}
+
+.showcase-heading {
+  align-items: flex-end;
+}
+
+.section-eyebrow {
+  text-shadow: 0 0 22px rgba(167, 139, 250, 0.18);
+}
+
+/* Preview mockups retain their existing dimensions and content. */
+.pp-app {
+  transform-origin: center center;
+  backface-visibility: hidden;
+}
+
+/* Selection and contact surfaces receive a subtle premium finish. */
+.project-cover-image {
+  background-color: #0c0c1b;
+  background-position: center;
+  will-change: transform;
+}
+
+/* Improve motion on touch screens and small viewports. */
+@media (hover: hover) and (pointer: fine) {
+  .project-card-premium:hover {
+    transform: translateY(-4px);
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    background-image: radial-gradient(ellipse at 50% -10%, rgba(109, 40, 217, 0.10), transparent 42%);
   }
 
-  .project-card-premium::before {
+  .project-card-premium {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  }
+}
+
+@media (max-width: 480px) {
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .project-card-premium::after {
     display: none;
   }
 }
 
-/* Accessibility: keep motion minimal when requested by the user. */
 @media (prefers-reduced-motion: reduce) {
-  .project-card-premium,
-  .project-card-premium::before,
-  .project-card-premium .pp-app {
-    transition: none !important;
+  :root {
+    scroll-behavior: auto;
   }
 
-  .project-card-premium {
-    transform: none !important;
-    will-change: auto;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
